@@ -11,6 +11,48 @@ export const search = () => {
     const request = axios.get(`${URL}?sort=-createdAt`)
     return {
         type: 'TODO_SEARCHED',
-        payload: 123
+        payload: request
+    }
+}
+
+export const add = (description) => {
+    return dispatch => {
+        const params = new URLSearchParams()
+        params.append('description', description)
+
+        axios.post(URL, params)
+             .then(resp => dispatch({ type: 'TODO_ADDED', payload: resp.data}))
+             .then(resp => dispatch(search()))
+    }
+}
+
+export const markAsDone = (todo) => {
+    return dispatch => {
+
+        axios.put(`${URL}/${todo._id}`, { ...todo, done: true })
+             .then(resp => dispatch(search()))
+    }
+}
+
+export const markAsPending = (todo) => {
+    return dispatch => {
+
+        axios.put(`${URL}/${todo._id}`, { ...todo, done: false })
+             .then(resp => dispatch(search()))
+    }
+}
+
+export const remove = (todo) => {
+    return dispatch => {
+
+        axios.delete(`${URL}/${todo._id}`)
+             .then(resp => dispatch(search()))
+    }
+}
+
+export const clean = (event) => {
+    return {
+        type: 'TODO_CLEANED',
+        payload: event.target.value
     }
 }

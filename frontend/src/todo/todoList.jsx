@@ -8,7 +8,7 @@ const TodoList = props => {
 
     const renderRows = () => {
         const list = props.list || []
-        return list.map(todo => (
+        return list.length > 0 ? list.map(todo => (
             <tr key={todo._id}>
                 <td className={todo.done ? 'markedAsDone' : ''}>{todo.description}</td>
                 <td>
@@ -26,7 +26,7 @@ const TodoList = props => {
                                 hide={!todo.done} />
                 </td>
             </tr>
-        ))
+        )) : <tr><td colSpan={3}>No tasks found.</td></tr>
     }
 
     return (
